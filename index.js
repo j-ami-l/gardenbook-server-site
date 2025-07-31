@@ -38,6 +38,16 @@ async function run() {
       res.send(result)
     })
 
+
+    app.get('/tipdetails/:id' , async (req , res)=>{
+      const id =  req.params.id
+      const query = {_id : new ObjectId(id)}
+
+      const result = await tipsCollection.findOne(query)
+      res.send(result)
+      
+    })
+
     app.post('/alltips', async (req, res) => {
       const newPost = req.body;
       const result = await tipsCollection.insertOne(newPost)
@@ -57,6 +67,8 @@ async function run() {
       console.log(updatePost, id);
 
       const filter = { _id: new ObjectId(id) };
+      console.log(filter);
+      
       const options = { upsert: true };
       const updateDoc = {
         $set: updatePost,
@@ -69,6 +81,15 @@ async function run() {
 
     })
 
+    app.delete('/delete' , async (req , res) =>{
+      const {id} = req.body
+      console.log(id);
+      const query = {_id : new ObjectId({id})}
+
+      const result = tipsCollection.deleteOne(query)
+      res.send(result)
+      
+    } )
 
 
 
