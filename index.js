@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
 const app = express()
@@ -32,6 +32,11 @@ async function run() {
     await client.connect();
 
     const tipsCollection = client.db("GardenBook").collection("tips")
+    app.get('/browsetips' , async(req , res)=>{
+      const query = {availability : "Public" };
+      const result = await tipsCollection.find(query).toArray()
+      res.send(result)
+    })
 
     app.post('/alltips', async (req, res) => {
       const newPost = req.body;
@@ -40,8 +45,28 @@ async function run() {
 
     })
 
-    app.get('/mytips' , async (req , res)=>{
-      
+    app.post('/mytips', async (req, res) => {
+      const query = req.body;
+      const result = await tipsCollection.find(query).toArray()
+      res.send(result)
+    })
+
+    app.put('/mytips/update/:id', async (req, res) => {
+      const id = req.params.id;
+      const updatePost = req.body;
+      console.log(updatePost, id);
+
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: updatePost,
+      };
+
+      const result = await tipsCollection.updateOne(filter, updateDoc, options);
+
+      res.send(result)
+
+
     })
 
 
