@@ -44,6 +44,9 @@ async function run() {
 
     app.get('/tipdetails/:id', async (req, res) => {
       const id = req.params.id
+      if (!ObjectId.isValid(id)) {
+        return res.status(200).json({ error: "Invalid ID format" });
+      }
       const query = { _id: new ObjectId(id) }
       const result = await tipsCollection.findOne(query)
       res.send(result)
