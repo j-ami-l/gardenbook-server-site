@@ -39,10 +39,10 @@ async function run() {
       const query = { availability: "Public" };
       const result = await tipsCollection.find(query).toArray()
 
-      const RestrictResult = result.map(r =>(
-        {title : r.title , name : r.name , topic : r.topic , difficulty : r.difficulty , image : r.image , userImage : r.userImage , _id : r._id , likeCount : r.likeCount}
+      const RestrictResult = result.map(r => (
+        { title: r.title, name: r.name, topic: r.topic, difficulty: r.difficulty, image: r.image, userImage: r.userImage, _id: r._id, likeCount: r.likeCount }
       ))
-      
+
       res.send(RestrictResult)
     })
 
@@ -54,8 +54,7 @@ async function run() {
       }
       const query = { _id: new ObjectId(id) }
       const result = await tipsCollection.findOne(query)
-      const {email , ...fillteredObj} = result;
-      console.log(fillteredObj);
+      const { email, ...fillteredObj } = result;
       res.send(fillteredObj)
 
     })
